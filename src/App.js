@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react' // (React) must be imported wherever a jsx format is used
+import AppRouter from './routes/AppRouter'
+import { Provider } from 'react-redux'
+import initAppStore from './redux/redux-store-config'
+// actions
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import getVisibleExpenses from './redux/selectors/expenses-selector'
+
+import 'normalize.css/normalize.css'
+import './App.scss'
+
+const Store = initAppStore()
+Store.subscribe(() => {
+  const { expenses, filters } = Store.getState()
+  console.log(getVisibleExpenses(expenses, filters))
+})
+
+class App extends Component {
+  render () {
+    return (
+      <Provider store={Store}>
+        <AppRouter />
+      </Provider>
+    )
+  }
 }
 
-export default App;
+export default App
